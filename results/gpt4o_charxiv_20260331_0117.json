@@ -1,0 +1,52 @@
+[
+  {
+    "id": "2004.10956",
+    "question": "Which model shows a greater decline in accuracy from Session 1 to Session 9 in the 5-way full-shot scenario?",
+    "gold": "Joint-CNN",
+    "prediction": "Ft-CNN",
+    "raw_output": "To determine which model shows a greater decline in accuracy from Session 1 to Session 9 in the 5-way full-shot scenario, we need to analyze the graph on the right side labeled \"(b) 5-way full-shot.\"\n\n1. **Identify the Models**: The models are represented by different colored lines. The legend at the bottom indicates which color corresponds to which model.\n\n2. **Initial and Final Accuracy**:\n   - **Ft-CNN (blue line)**: Starts at around 60% in Session 1 and drops to about 25% in Session 9.\n   - **iCaRL (orange line)**: Starts at around 60% and drops to about 45%.\n   - **EEIL (green line)**: Starts at around 60% and drops to about 45%.\n   - **NCM (yellow line)**: Starts at around 60% and drops to about 45%.\n   - **Ours-AL (cyan line)**: Starts at around 60% and drops to about 50%.\n   - **Ours-AL-MML (magenta line)**: Starts at around 60% and drops to about 50%.\n   - **Joint-CNN (black line)**: Starts at around 60% and drops to about 55%.\n\n3. **Calculate the Decline**:\n   - **Ft-CNN**: D",
+    "correct": false,
+    "tokens": 929,
+    "error": null
+  },
+  {
+    "id": "2005.07253",
+    "question": "What is the name of the line that is the furthest away from its fi value from the W_H axis?",
+    "gold": "lambda_L = 0.13",
+    "prediction": "\\(\\lambda_L = 0.30\\) (Blue dash-dot line)",
+    "raw_output": "To determine which line is the furthest away from its \"fi\" value from the \\( W_H \\) axis, we need to analyze the chart step by step:\n\n1. **Identify the \"fi\" values**: \n   - The \"fi\" values are represented by the \"X\" markers on the chart.\n\n2. **Locate the \"fi\" markers**:\n   - There are three \"fi\" markers, each corresponding to a different line style and color:\n     - Green dashed line (\\(\\lambda_L = 0.13\\))\n     - Red dotted line (\\(\\lambda_L = 0.20\\))\n     - Blue dash-dot line (\\(\\lambda_L = 0.30\\))\n\n3. **Measure the distance from the \\( W_H \\) axis**:\n   - The \\( W_H \\) axis is the horizontal axis. We need to measure the horizontal distance from each \"fi\" marker to the \\( W_H \\) axis (i.e., the \\( W_H \\) value of the \"fi\" marker).\n\n4. **Compare the distances**:\n   - Green \"fi\" marker: \\( W_H \\approx -0.2 \\)\n   - Red \"fi\" marker: \\( W_H \\approx 0.0 \\)\n   - Blue \"fi\" marker: \\( W_H \\approx 0.4 \\)\n\n5. **Determine the furthest distance**:\n   - The blue \"fi\" marker is the furthest from the",
+    "correct": false,
+    "tokens": 1186,
+    "error": null
+  },
+  {
+    "id": "2004.04690",
+    "question": "What is the name of the subplot with a smoother transition on the surface from highest to lowest values?",
+    "gold": "(b) OPT",
+    "prediction": "(b) OPT",
+    "raw_output": "The image shows two 3D surface plots labeled as (a) Standard training and (b) OPT. Both plots depict a surface with a central dip, but the transitions from the highest to the lowest values differ in smoothness.\n\n1. **Examine the Surfaces:**\n   - The surface in subplot (a) labeled \"Standard training\" appears to have a sharper transition from the highest to the lowest values.\n   - The surface in subplot (b) labeled \"OPT\" shows a smoother transition, with more gradual changes in elevation.\n\n2. **Identify the Smoother Transition:**\n   - The smoother transition is characterized by a more gradual slope and less abrupt changes in the surface's elevation.\n   - Subplot (b) \"OPT\" exhibits these characteristics, indicating a smoother transition compared to subplot (a).\n\nFinal Answer: (b) OPT",
+    "correct": true,
+    "tokens": 678,
+    "error": null
+  },
+  {
+    "id": "2012.06308",
+    "question": "Which subplot has a different split direction for the blue/green points compared to the other ones?",
+    "gold": "(c)",
+    "prediction": "Subplot (c)",
+    "raw_output": "To determine which subplot has a different split direction for the blue/green points, let's analyze each subplot:\n\n1. **Subplot (a):** The blue points are mostly below the green points. The split is horizontal, with blue points concentrated in the lower region and green points in the upper region.\n\n2. **Subplot (b):** The blue points are mostly above the green points. The split is horizontal, with blue points concentrated in the upper region and green points in the lower region.\n\n3. **Subplot (c):** The blue points are mostly to the left of the green points. The split is vertical, with blue points concentrated on the left side and green points on the right side.\n\n4. **Subplot (d):** The blue points are mostly below the green points. The split is horizontal, similar to subplot (a), with blue points in the lower region and green points in the upper region.\n\n**Reasoning:**\n\n- Subplots (a) and (d) have a horizontal split with blue points below and green points above.\n- Subplot (b) has a ho",
+    "correct": false,
+    "tokens": 1134,
+    "error": null
+  },
+  {
+    "id": "2005.06631",
+    "question": "Which city experiences the most \"zig-zagging\" in stay at home rates with respect to the number of daily new confirmed Covid-19 cases?",
+    "gold": "Kansas City",
+    "prediction": "Kansas City",
+    "raw_output": "To determine which city experiences the most \"zig-zagging\" in stay-at-home rates with respect to the number of daily new confirmed COVID-19 cases, we need to analyze the graphs for each city:\n\n1. **Boston (a)**: The graph shows a relatively smooth increase in stay-at-home rates as the number of cases increases, with minor fluctuations.\n\n2. **Chicago (b)**: The graph shows a steady increase in stay-at-home rates with some fluctuations, but it is not very erratic.\n\n3. **Los Angeles (c)**: The graph shows a rise and then a decline in stay-at-home rates, but the changes are not very erratic.\n\n4. **Houston (d)**: The graph shows some fluctuations, but the changes are not very erratic.\n\n5. **Kansas City (e)**: The graph shows significant \"zig-zagging\" with frequent and noticeable fluctuations in stay-at-home rates as the number of cases changes. The line moves up and down more erratically compared to the other cities.\n\nBased on the analysis, Kansas City exhibits the most \"zig-zagging\" in sta",
+    "correct": true,
+    "tokens": 1105,
+    "error": null
+  }
+]

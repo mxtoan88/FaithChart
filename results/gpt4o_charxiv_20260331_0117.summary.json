@@ -1,0 +1,9 @@
+{
+  "model": "GPT-4o",
+  "benchmark": "charxiv",
+  "n_total": 5,
+  "n_correct": 2,
+  "n_errors": 0,
+  "accuracy": 40.0,
+  "timestamp": "2026-03-31T01:18:10.974172"
+}
