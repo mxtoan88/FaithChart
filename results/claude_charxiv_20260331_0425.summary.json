@@ -1,0 +1,9 @@
+{
+  "model": "Claude",
+  "benchmark": "charxiv",
+  "n_total": 200,
+  "n_correct": 138,
+  "n_errors": 0,
+  "accuracy": 69.0,
+  "timestamp": "2026-03-31T04:25:41.058711"
+}
