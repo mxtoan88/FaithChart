@@ -1,0 +1,9 @@
+{
+  "model": "claude",
+  "n": 300,
+  "accuracy": 0.2267,
+  "sufficiency": 0.7467,
+  "comprehensiveness": 0.2691,
+  "faith_score": 0.5079,
+  "timestamp": "2026-04-02T02:48:44.959196"
+}

@@ -1,0 +1,9 @@
+{
+  "model": "tinychart",
+  "n": 300,
+  "accuracy": 0.38,
+  "sufficiency": 0.5308,
+  "comprehensiveness": 0.4673,
+  "faith_score": 0.499,
+  "timestamp": "2026-04-03T04:47:54.696860"
+}

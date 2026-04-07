@@ -1,0 +1,9 @@
+{
+  "model": "qwen",
+  "n": 300,
+  "accuracy": 0.1967,
+  "sufficiency": 0.4712,
+  "comprehensiveness": 0.5551,
+  "faith_score": 0.5131,
+  "timestamp": "2026-04-03T03:09:08.274731"
+}
