@@ -265,16 +265,7 @@ LLM-as-judge correlation: Spearman r(GPT-4o judge, FaithScore) = −0.106 (p=0.0
 If you use FaithChart in your research, please cite:
 
 ```bibtex
-@article{mai2026faithchart,
-  title     = {FaithChart: A Faithfulness Evaluation Framework for
-               Explainable Chart Question Answering},
-  author    = {Mai, Xuan Toan and Tran, Hong Tai and Tran, Tuan-Anh},
-  journal   = {Information Fusion},
-  year      = {2026},
-  publisher = {Elsevier},
-  note      = {Under review}
-}
-```
+
 
 ---
 
