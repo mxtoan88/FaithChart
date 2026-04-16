@@ -4,7 +4,6 @@
 
 ### A Faithfulness Evaluation Framework for Explainable Chart Question Answering
 
-[![Paper](https://img.shields.io/badge/Paper-Information%20Fusion-blue)](https://github.com/mxtoan/faithchart)
 [![Dataset](https://img.shields.io/badge/🤗%20Dataset-FaithChart--1500-yellow)](https://huggingface.co/datasets/mxtoan/FaithChart-1500)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](https://python.org)
