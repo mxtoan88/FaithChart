@@ -1,24 +1,24 @@
 #!/usr/bin/env python3
 """
-FaithChart Tháng 2 — Task 3: Perturbation Pipeline
+Perturbation Pipeline
 ====================================================
-Tạo perturbed versions của chart images để tính Sufficiency & Comprehensiveness.
+Create perturbed versions of chart images for finding Sufficiency & Comprehensiveness.
 
-5 loại perturbation:
+5 types of perturbation:
   1. data_values   — blur/mask data points, bars, lines
   2. axis_labels   — mask axis tick labels (giữ trục)
   3. legend        — mask legend entries
   4. title         — mask chart title
   5. background_gridlines — remove gridlines
 
-Cho mỗi cited_region trong annotation:
-  - Tạo variant với region đó BỊ XÓA  → dùng cho Sufficiency
-  - Tạo variant với region đó GIỮ NGUYÊN, xóa tất cả uncited → dùng cho Comprehensiveness
+For each cited_region in the annotation:
+- Create a variant with that region DELETED → used for Sufficiency
+- Create a variant with that region KEEPED, delete all uncited → used for Comprehensiveness
 
-Chạy:
+Run:
   pip install pillow opencv-python numpy scikit-image
-  python 03_perturbation.py --sample FC_0001  # Test 1 sample
-  python 03_perturbation.py --all              # Toàn bộ dataset
+  python perturbation.py --sample FC_0001  # Test 1 sample
+  python perturbation.py --all              # All dataset
 """
 
 import json, base64, argparse, re
@@ -49,33 +49,33 @@ def detect_region_bbox(img: Image.Image, region_type: RegionType) -> tuple | Non
     """
     Heuristic bounding box detection cho chart regions.
     Với paper, dùng kết hợp:
-    - Rule-based (vị trí thường gặp của từng region)
-    - Có thể thay bằng ViT-based detector sau
+    - Rule-based (common locations of each region)
+    - It can be replaced with a ViT-based detector
 
     Returns: (x1, y1, x2, y2) hoặc None
     """
     W, H = img.size
 
     if region_type == "title":
-        # Title thường ở top 10-15%
+        # Title often at top 10-15%
         return (0, 0, W, int(H * 0.12))
 
     elif region_type == "axis_labels":
         # X-axis labels: bottom 15%, Y-axis labels: left 15%
-        # Return toàn bộ margins
-        return None  # Sẽ handle riêng
+        # Return all margins
+        return None  # will handle 
 
     elif region_type == "legend":
-        # Legend thường ở top-right hoặc bottom-right
+        # Legend often at top-right or bottom-right
         # Heuristic: right 30%, top 60%
         return (int(W * 0.70), 0, W, int(H * 0.60))
 
     elif region_type == "background_gridlines":
-        # Gridlines ở phần data area (exclude margins)
+        # Gridlines at data area (exclude margins)
         return (int(W * 0.12), int(H * 0.10), int(W * 0.95), int(H * 0.88))
 
     elif region_type == "data_values":
-        # Data area = phần giữa chart (exclude title, axes, legend)
+        # Data area = at chart (exclude title, axes, legend)
         return (int(W * 0.12), int(H * 0.10), int(W * 0.88), int(H * 0.88))
 
     return None
@@ -152,10 +152,10 @@ ALL_REGION_TYPES: list[RegionType] = [
 
 def generate_perturbations(record: dict, annotation: dict) -> dict:
     """
-    Cho 1 sample, tạo tất cả perturbation variants cần thiết:
+    With 1 sample, create all perturbation variants:
 
-    1. For Sufficiency: xóa từng cited region → model answer nên thay đổi
-    2. For Comprehensiveness: xóa từng uncited region → answer nên giữ nguyên
+    1. For Sufficiency: delete each cited region → model answer change
+    2. For Comprehensiveness: delete each uncited region → answer not change
 
     Returns dict: {
       "sufficiency_variants": [{"removed_region": ..., "image_b64": ...}],
@@ -168,7 +168,7 @@ def generate_perturbations(record: dict, annotation: dict) -> dict:
 
     img = b64_to_pil(img_b64)
 
-    # Xác định cited và uncited regions từ annotation
+    # Locate cited and uncited regions from annotation
     cited_regions = annotation.get("cited_regions", [])
     cited_types = {r["region_type"] for r in cited_regions
                    if r.get("necessity") in ["critical", "supporting"]}

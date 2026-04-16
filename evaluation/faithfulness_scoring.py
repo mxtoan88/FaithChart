@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """
-FaithChart Tuần 9 — Faithfulness Scoring
+Faithfulness Scoring
 ==========================================
-Tính Sufficiency + Comprehensiveness + FaithScore cho 4 models.
+Calculate Sufficiency + Comprehensiveness + FaithScore for 4 models.
 
-Chạy:
-  python 04_faithfulness_scoring.py --model gpt4o --n 300
-  python 04_faithfulness_scoring.py --model claude --n 300
-  python 04_faithfulness_scoring.py --model qwen --n 300
-  python 04_faithfulness_scoring.py --model tinychart --n 300
-  python 04_faithfulness_scoring.py --summary
+Run:
+  python faithfulness_scoring.py --model gpt4o --n 300
+  python faithfulness_scoring.py --model claude --n 300
+  python faithfulness_scoring.py --model qwen --n 300
+  python faithfulness_scoring.py --model tinychart --n 300
+  python faithfulness_scoring.py --summary
 """
 
 import os, sys, json, re, time, argparse

@@ -120,8 +120,9 @@ faithchart/
 │   └── faithchart_1500_meta.json    # Sample metadata (images on HuggingFace)
 │
 ├── evaluation/
-│   ├── month2_03_perturbation.py    # Generate perturbed chart images
-│   └── 04_faithfulness_scoring.py   # Compute Suf/Comp/FaithScore for any model
+│   ├── perturbation.py    # Generate perturbed chart images
+│   └── faithfulness_scoring.py   # Compute Suf/Comp/FaithScore for any model
+|   └── error_analysis.py       #Error Taxonomy Analysis
 │
 ├── training/
 │   └── train_faithchart_b.py        # FaithChart-B fine-tuning (LoRA on Qwen2-VL-2B)

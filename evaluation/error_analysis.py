@@ -1,12 +1,6 @@
 """
 FaithChart — Script 2: Error Taxonomy Analysis
 ================================================
-Phân tích kết quả từ script 01, phân loại lỗi theo 6 error types
-từ ChartInsighter taxonomy. Sinh ra bảng error distribution.
-
-Sử dụng:
-  python 02_error_analysis.py --results_dir results/
-  python 02_error_analysis.py --results_dir results/ --use_gpt_judge
 
 Output:
   results/error_taxonomy_YYYYMMDD.json
@@ -28,61 +22,61 @@ except ImportError:
 ERROR_TYPES = {
     "E1_numerical_value": {
         "name": "Numerical Value Error",
-        "desc": "Model mô tả hoặc tính toán sai giá trị định lượng",
-        "examples": ["Tính sai average", "Đọc sai số từ trục Y"],
+        "desc": "The model describes or calculates an incorrect quantitative value",
+        "examples": ["Average error", "Read the error from the Y-axis"],
         "detection": "gold và prediction là số, relaxed_match fail",
     },
     "E2_trend_direction": {
         "name": "Trend Direction Error",
-        "desc": "Model nhầm hướng xu hướng (tăng/giảm)",
-        "examples": ["Nói tăng khi thực tế giảm"],
-        "detection": "keywords: increase/decrease/up/down/rise/fall bị đảo ngược",
+        "desc": "The model is misidentifying the trend (upward/downward)",
+        "examples": ["They say it's increasing when it's actually decreasing"],
+        "detection": "keywords: increase/decrease/up/down/rise/fall inverse",
     },
     "E3_extremum": {
         "name": "Extremum Error",
-        "desc": "Model nhầm điểm max/min, peak/trough hoặc sai năm/thời điểm",
-        "examples": ["Nói 2008 là peak thay vì 2007", "Nhầm maximum với local max"],
-        "detection": "gold là tên/năm gắn với max/min, prediction sai",
+        "desc": "The model incorrectly identifies max/min points, peak/trough points, or the year/time",
+        "examples": ["Say 2008 was the peak instead of 2007", "Confusing maximum with local max"],
+        "detection": "Gold is the name/year associated with max/min; the prediction is incorrect",
     },
     "E4_range": {
         "name": "Range Error",
-        "desc": "Model ước tính sai khoảng giá trị hoặc interval",
-        "examples": ["Nói 10-20 khi thực tế 15-25"],
-        "detection": "gold có dạng range, prediction sai khoảng",
+        "desc": "The model incorrectly estimates the range or interval",
+        "examples": ["They say 10-20 when in reality it's 15-25"],
+        "detection": "Gold has a range, and the prediction is inaccurate by about a certain margin",
     },
     "E5_multidim_trend": {
         "name": "Multi-dimensional Trend Error",
-        "desc": "Model không so sánh được nhiều data series cùng lúc",
-        "examples": ["Nhầm ranking giữa 3 series"],
-        "detection": "câu hỏi có từ compare/which/more/less, prediction sai comparison",
+        "desc": "The model cannot compare multiple data series at the same time",
+        "examples": ["Mistaken ranking between the 3 series"],
+        "detection": "The question contains the words compare/which/more/less; the prediction is incorrect comparison",
     },
     "E6_proportion": {
         "name": "Proportion Error",
-        "desc": "Model nhầm tỉ lệ phần trăm hoặc relative size",
-        "examples": ["Nói 30% khi thực tế 45%"],
-        "detection": "gold chứa %, prediction sai magnitude nhiều",
+        "desc": "Model incorrectly uses percentages or relative sizes",
+        "examples": ["They said 30% when it was actually 45%"],
+        "detection": "Gold contains percentages, and the prediction magnitude is often inaccurate",
     },
     "E7_unanswerable": {
         "name": "Hallucination on Unanswerable",
-        "desc": "Model sinh answer khi câu hỏi không thể trả lời từ chart",
-        "examples": ["Tự bịa số khi chart không có thông tin"],
-        "detection": "gold = N/A hoặc unanswerable, prediction là giá trị cụ thể",
+        "desc": "The model generates answers when the question cannot be answered from the chart",
+        "examples": ["Make up numbers when the chart lacks information"],
+        "detection": "gold = N/A or unanswerable, prediction is a specific value",
     },
     "E8_structural": {
         "name": "Chart Structure Error",
-        "desc": "Model hiểu sai cấu trúc chart (axes, legend, scale)",
-        "examples": ["Nhầm trục X với trục Y", "Bỏ qua logarithmic scale"],
-        "detection": "GPT judge xác định dựa trên chart structure",
+        "desc": "Model misunderstood the chart structure (axes, legends, scales)",
+        "examples": ["Confusing the X-axis with the Y-axis", "Ignore logarithmic scale"],
+        "detection": "GPT judge is determined based on chart structure",
     },
-    "CORRECT": {"name": "Correct", "desc": "Model trả lời đúng", "examples": [], "detection": "relaxed_match pass"},
-    "OTHER_ERROR": {"name": "Other Error", "desc": "Lỗi không thuộc các loại trên", "examples": [], "detection": "manual review"},
+    "CORRECT": {"name": "Correct", "desc": "model answered correctly", "examples": [], "detection": "relaxed_match pass"},
+    "OTHER_ERROR": {"name": "Other Error", "desc": "Errors that do not fall under the above categories", "examples": [], "detection": "manual review"},
 }
 
 # ── Rule-based classifier ─────────────────────────────────
 def classify_error_rules(sample: dict) -> str:
     """
-    Phân loại lỗi dựa trên rules đơn giản.
-    Dùng khi không có GPT judge.
+    Error classification based on simple rules.
+    Use when GPT judge is unavailable..
     """
     if sample.get("correct"):
         return "CORRECT"
@@ -137,8 +131,8 @@ def classify_error_rules(sample: dict) -> str:
 
 def classify_error_gpt(sample: dict, client) -> str:
     """
-    Dùng GPT-4o để phân loại lỗi chính xác hơn.
-    Tốn khoảng $0.002 per sample.
+    Use GPT-40 for more accurate error classification.
+    Costs approximately $0.002 per sample.
     """
     prompt = f"""You are analyzing errors in chart question answering.
 

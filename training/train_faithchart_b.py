@@ -9,13 +9,11 @@ from PIL import Image
 import io
 import base64
 
-# --- 0. KHẮC PHỤC TRIỆT ĐỂ LỖI RAM & DISK QUOTA ---
 os.environ["HF_HOME"] = "/workspace/.hf_cache"
 os.environ["HF_DATASETS_CACHE"] = "/workspace/.hf_cache/datasets"
 os.environ["TRANSFORMERS_CACHE"] = "/workspace/.hf_cache/hub"
 os.environ["TMPDIR"] = "/workspace/.tmp"
 
-# Cho phép ghi cache xuống đĩa để giải phóng RAM
 enable_caching()
 
 def setup_folders():
@@ -40,9 +38,9 @@ def setup_folders():
             except Exception: pass
     print("✅ Dọn dẹp hoàn tất.")
 
-# --- 1. KIỂM TRA HỆ THỐNG ---
+# --- 1. Check system ---
 def check_environment():
-    print("🔍 Đang kiểm tra môi trường hệ thống...")
+    print("Check system...")
     import transformers
     import accelerate
     
@@ -51,8 +49,8 @@ def check_environment():
     print(f"  - GPU: {torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'None'}")
     
     total, used, free = shutil.disk_usage("/workspace")
-    print(f"  - Dung lượng trống (/workspace): {free // (2**30)}GB")
-    print("✅ Kiểm tra hoàn tất.\n")
+    print(f"  - Free disk (/workspace): {free // (2**30)}GB")
+    print("✅ Finished checking.\n")
 
 # --- 2. CUSTOM DATA COLLATOR (M-RoPE & Dynamic Resolution) ---
 class Qwen2VLDataCollator:
@@ -89,7 +87,7 @@ class Qwen2VLDataCollator:
         batch["labels"] = torch.stack(padded_labels)
         batch["mm_token_type_ids"] = torch.stack(padded_mm_token_ids)
 
-        # Hợp nhất pixel values (Concatenate cho dynamic resolution)
+        # Merge pixel values (Concatenate cho dynamic resolution)
         if pixel_values:
             processed_pixels = []
             for p in pixel_values:
@@ -107,7 +105,7 @@ class Qwen2VLDataCollator:
 
         return batch
 
-# --- 3. CẤU HÌNH MÔ HÌNH ---
+# --- 3. Configure ---
 MODEL_ID = "Qwen/Qwen2-VL-2B-Instruct"
 DATA_PATH = "faithchart_sft_train.jsonl"
 OUTPUT_DIR = "/workspace/faithchart_b_checkpoints"
@@ -116,7 +114,7 @@ def get_model_and_processor():
     from transformers import Qwen2VLForConditionalGeneration, AutoProcessor, BitsAndBytesConfig
     from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 
-    print(f"📦 Đang nạp mô hình {MODEL_ID}...")
+    print(f" Model loading {MODEL_ID}...")
     
     model_kwargs = {
         "torch_dtype": torch.bfloat16,
@@ -124,7 +122,7 @@ def get_model_and_processor():
         "attn_implementation": "flash_attention_2"
     }
     
-    # Dùng 4-bit để cực kỳ an toàn cho VRAM và RAM hệ thống
+    # Use 4-bit 
     model_kwargs["quantization_config"] = BitsAndBytesConfig(
         load_in_4bit=True,
         bnb_4bit_compute_dtype=torch.bfloat16,
@@ -133,7 +131,7 @@ def get_model_and_processor():
     
     model = Qwen2VLForConditionalGeneration.from_pretrained(MODEL_ID, **model_kwargs)
     
-    # Processor với giới hạn pixel để tránh bùng nổ bộ nhớ
+    # Processor with pixel limits to prevent memory explosions
     processor = AutoProcessor.from_pretrained(MODEL_ID, max_pixels=1024*28*28)
     
     model = prepare_model_for_kbit_training(model)
@@ -152,7 +150,7 @@ def decode_base64_to_image(base64_string):
     return Image.open(io.BytesIO(image_data)).convert("RGB")
 
 def preprocess_fn(example, processor):
-    # Xử lý từng mẫu một (Non-batched) để tiết kiệm RAM
+    # Process each sample individually (non-batched) to save RAM
     from qwen_vl_utils import process_vision_info
     
     messages = example["messages"]
@@ -175,7 +173,7 @@ def preprocess_fn(example, processor):
     labels = input_ids.clone()
     labels[labels == processor.tokenizer.pad_token_id] = -100
     
-    # Chuyển sang numpy để lưu cache disk
+
     res = {
         "input_ids": input_ids.tolist(),
         "labels": labels.tolist(),
@@ -184,7 +182,7 @@ def preprocess_fn(example, processor):
         "image_grid_thw": inputs["image_grid_thw"].numpy()
     }
     
-    # Giải phóng memory ngay lập tức
+
     del inputs, image_inputs, processed_content, new_messages
     return res
 
@@ -195,14 +193,14 @@ def main():
     from transformers import Trainer, TrainingArguments
     model, processor = get_model_and_processor()
 
-    print("📂 Đang nạp dataset...")
+    print("Dataset loading...")
     dataset = load_dataset("json", data_files=DATA_PATH, split="train").shuffle(seed=42)
     
-    print("⚙️ Đang tiền xử lý (Ghi trực tiếp xuống đĩa, giải phóng RAM liên tục)...")
-    # Tắt batched, tắt keep_in_memory, giảm writer_batch_size để bảo vệ RAM
+    print("Preprocessing in progress (Writing directly to disk, continuously freeing RAM)...")
+    # Disable batching, disable keep_in_memory, and reduce writer_batch_size to protect RAM
     train_dataset = dataset.map(
         lambda x: preprocess_fn(x, processor), 
-        batched=False, # Quan trọng: Xử lý từng cái một
+        batched=False, # Important: Handle each one individually
         remove_columns=dataset.column_names,
         desc="Pre-processing (RAM safe mode)",
         keep_in_memory=False,
@@ -235,13 +233,13 @@ def main():
         data_collator=Qwen2VLDataCollator(processor)
     )
 
-    print("🚀 Bắt đầu huấn luyện...")
+    print("Training...")
     trainer.train()
 
-    print("💾 Lưu adapters...")
+    print("Save adapters...")
     model.save_pretrained("/workspace/faithchart_b_final")
     processor.save_pretrained("/workspace/faithchart_b_final")
-    print("✅ Xong!")
+    print("Done!")
 
 if __name__ == "__main__":
     main()
