@@ -1,0 +1,16 @@
+{
+  "dataset_name": "FaithChart-1500",
+  "total_samples": 1500,
+  "sources": {
+    "chartqa_human": 750,
+    "charxiv_reasoning": 750
+  },
+  "difficulty": {
+    "standard": 750,
+    "hard": 750
+  },
+  "annotation_batches": 50,
+  "samples_per_batch": 30,
+  "created": "2026-04-01T07:21:51.684486",
+  "version": "1.0"
+}
